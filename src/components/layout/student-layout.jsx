@@ -58,12 +58,19 @@ export default function StudentLayout({ children, title }) {
         }
 
         // Get additional student data
-        const { data: studentData } = await supabase.from("students").select("*").eq("user_id", authUser.id).single()
+        const { data: studentData } = await supabase.from("students").select("*").eq("email", authUser.email).single()
+
+        if (!studentData) {
+          console.error("No student data found")
+          return
+        }
 
         setUser({
           ...authUser,
           ...studentData,
           username: studentData?.student_id || authUser.email,
+          photo: studentData?.photo,
+          full_name: studentData?.full_name,
         })
       } catch (err) {
         console.error("Error fetching user:", err)
@@ -98,7 +105,7 @@ export default function StudentLayout({ children, title }) {
             <div className="flex items-center">
               <h2 className="text-xl font-bold">Student Portal</h2>
               <span className="hidden md:inline-block ml-4 text-sm text-gray-300">
-                Welcome, {user?.username || "Student"}
+                Welcome, {user?.full_name || user?.username || "Student"}
               </span>
             </div>
 
@@ -128,26 +135,71 @@ export default function StudentLayout({ children, title }) {
                   Profile
                 </span>
               </a>
-              <button
-                onClick={handleLogout}
-                className="ml-4 px-3 py-2 border border-gray-600 rounded-md hover:bg-gray-700 transition-colors"
-              >
-                <span className="flex items-center">
-                  <FiLogOut className="mr-2" />
-                  Logout
-                </span>
-              </button>
+
+              {/* Profile Picture and Logout */}
+              <div className="flex items-center space-x-3 ml-4">
+                <div className="h-8 w-8 rounded-full bg-gray-600 overflow-hidden flex items-center justify-center border-2 border-gray-500">
+                  {user?.photo ? (
+                    <img
+                      src={user.photo || "/placeholder.svg"}
+                      alt="Profile"
+                      className="h-full w-full object-cover"
+                      onError={(e) => {
+                        e.target.style.display = "none"
+                        e.target.nextSibling.style.display = "flex"
+                      }}
+                    />
+                  ) : null}
+                  <span
+                    className={`text-gray-300 font-medium text-sm ${user?.photo ? "hidden" : "flex"}`}
+                    style={{ display: user?.photo ? "none" : "flex" }}
+                  >
+                    {user?.full_name
+                      ?.split(" ")
+                      .map((n) => n[0])
+                      .join("") ||
+                      user?.username?.substring(0, 2).toUpperCase() ||
+                      "ST"}
+                  </span>
+                </div>
+                <button
+                  onClick={handleLogout}
+                  className="px-3 py-2 border border-gray-600 rounded-md hover:bg-gray-700 transition-colors"
+                >
+                  <span className="flex items-center">
+                    <FiLogOut className="mr-2" />
+                    Logout
+                  </span>
+                </button>
+              </div>
             </nav>
 
             {/* Mobile menu button */}
-            <div className="md:hidden flex items-center">
-              {user?.photo && (
-                <img
-                  src={user.photo || "/placeholder.svg"}
-                  alt="Profile"
-                  className="h-8 w-8 rounded-full object-cover mr-2"
-                />
-              )}
+            <div className="md:hidden flex items-center space-x-2">
+              <div className="h-8 w-8 rounded-full bg-gray-600 overflow-hidden flex items-center justify-center border-2 border-gray-500">
+                {user?.photo ? (
+                  <img
+                    src={user.photo || "/placeholder.svg"}
+                    alt="Profile"
+                    className="h-full w-full object-cover"
+                    onError={(e) => {
+                      e.target.style.display = "none"
+                      e.target.nextSibling.style.display = "flex"
+                    }}
+                  />
+                ) : null}
+                <span
+                  className={`text-gray-300 font-medium text-sm ${user?.photo ? "hidden" : "flex"}`}
+                  style={{ display: user?.photo ? "none" : "flex" }}
+                >
+                  {user?.full_name
+                    ?.split(" ")
+                    .map((n) => n[0])
+                    .join("") ||
+                    user?.username?.substring(0, 2).toUpperCase() ||
+                    "ST"}
+                </span>
+              </div>
               <button className="text-white" onClick={toggleMobileMenu}>
                 {isMobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
               </button>
