@@ -1,5 +1,3 @@
-"use client"
-
 import { useState, useEffect } from "react"
 import StudentLayout from "../layout/student-layout"
 import { Upload, Save } from "lucide-react"

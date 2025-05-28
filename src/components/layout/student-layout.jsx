@@ -1,5 +1,3 @@
-"use client"
-
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { FiHome, FiCalendar, FiAward, FiUser, FiLogOut, FiMenu, FiX } from "react-icons/fi"
@@ -101,12 +99,36 @@ export default function StudentLayout({ children, title }) {
       <header className="bg-gray-800 text-white">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
-            {/* Logo and title */}
+            {/* Logo and title with profile picture */}
             <div className="flex items-center">
               <h2 className="text-xl font-bold">Student Portal</h2>
-              <span className="hidden md:inline-block ml-4 text-sm text-gray-300">
-                Welcome, {user?.full_name || user?.username || "Student"}
-              </span>
+              <div className="hidden md:flex items-center ml-4">
+                <div className="h-10 w-10 rounded-full bg-gray-600 overflow-hidden flex items-center justify-center border-2 border-gray-500 mr-3">
+                  {user?.photo ? (
+                    <img
+                      src={user.photo || "/placeholder.svg"}
+                      alt="Profile"
+                      className="h-full w-full object-cover"
+                      onError={(e) => {
+                        e.target.style.display = "none"
+                        e.target.nextSibling.style.display = "flex"
+                      }}
+                    />
+                  ) : null}
+                  <span
+                    className={`text-gray-300 font-medium text-sm ${user?.photo ? "hidden" : "flex"}`}
+                    style={{ display: user?.photo ? "none" : "flex" }}
+                  >
+                    {user?.full_name
+                      ?.split(" ")
+                      .map((n) => n[0])
+                      .join("") ||
+                      user?.username?.substring(0, 2).toUpperCase() ||
+                      "ST"}
+                  </span>
+                </div>
+                <span className="text-sm text-gray-300">Welcome, {user?.full_name || user?.username || "Student"}</span>
+              </div>
             </div>
 
             {/* Desktop Navigation */}
@@ -136,42 +158,16 @@ export default function StudentLayout({ children, title }) {
                 </span>
               </a>
 
-              {/* Profile Picture and Logout */}
-              <div className="flex items-center space-x-3 ml-4">
-                <div className="h-8 w-8 rounded-full bg-gray-600 overflow-hidden flex items-center justify-center border-2 border-gray-500">
-                  {user?.photo ? (
-                    <img
-                      src={user.photo || "/placeholder.svg"}
-                      alt="Profile"
-                      className="h-full w-full object-cover"
-                      onError={(e) => {
-                        e.target.style.display = "none"
-                        e.target.nextSibling.style.display = "flex"
-                      }}
-                    />
-                  ) : null}
-                  <span
-                    className={`text-gray-300 font-medium text-sm ${user?.photo ? "hidden" : "flex"}`}
-                    style={{ display: user?.photo ? "none" : "flex" }}
-                  >
-                    {user?.full_name
-                      ?.split(" ")
-                      .map((n) => n[0])
-                      .join("") ||
-                      user?.username?.substring(0, 2).toUpperCase() ||
-                      "ST"}
-                  </span>
-                </div>
-                <button
-                  onClick={handleLogout}
-                  className="px-3 py-2 border border-gray-600 rounded-md hover:bg-gray-700 transition-colors"
-                >
-                  <span className="flex items-center">
-                    <FiLogOut className="mr-2" />
-                    Logout
-                  </span>
-                </button>
-              </div>
+              {/* Logout Button */}
+              <button
+                onClick={handleLogout}
+                className="ml-4 px-3 py-2 border border-gray-600 rounded-md hover:bg-gray-700 transition-colors"
+              >
+                <span className="flex items-center">
+                  <FiLogOut className="mr-2" />
+                  Logout
+                </span>
+              </button>
             </nav>
 
             {/* Mobile menu button */}

@@ -1,5 +1,3 @@
-"use client"
-
 import { useState } from "react"
 import { AlertCircle, GraduationCap } from "lucide-react"
 import { supabase } from "../../lib/supabaseClient"
@@ -93,35 +91,29 @@ export default function LoginForm() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center justify-center">
-            <div className="flex items-center space-x-3">
-              <div className="bg-gray-700 p-2 rounded-lg">
-                <GraduationCap className="h-8 w-8 text-white" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-800">Student Management System</h1>
-                <p className="text-sm text-gray-600">Manage students, attendance, and grades efficiently</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
-
+    <div className="h-screen bg-gray-100 flex overflow-hidden">
       {/* Main Content */}
-      <main className="flex-1 flex items-center p-4">
-        <div className="container mx-auto">
-          <div className="flex flex-col md:flex-row">
-            {/* Left side content - can be used for an image or additional info */}
-            <div className="md:w-1/2 p-4 hidden md:flex items-center justify-center">
+      <div className="flex-1 flex">
+        <div className="container mx-auto flex">
+          <div className="flex flex-col lg:flex-row w-full">
+            {/* Left side - Logo and Title */}
+            <div className="lg:w-1/2 p-8 flex flex-col justify-center items-center">
+              <div className="max-w-lg w-full">
+                <div className="flex flex-col items-center text-center space-y-6">
+                  <div className="bg-gray-700 p-4 rounded-lg">
+                    <GraduationCap className="h-16 w-16 text-white" />
+                  </div>
+                  <div>
+                    <h1 className="text-4xl font-bold text-gray-800 mb-4">Student Management System</h1>
+                    <p className="text-lg text-gray-600">Manage students, attendance, and grades efficiently</p>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            {/* Login/Register Card - now aligned to the left */}
-            <div className="md:w-1/2 p-4">
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden max-w-md">
+            {/* Right side - Login/Register Card */}
+            <div className="lg:w-1/2 p-8 flex items-center justify-center lg:justify-start">
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden w-full max-w-md">
                 {/* Tab Navigation */}
                 <div className="border-b border-gray-200">
                   <nav className="flex">
@@ -320,7 +312,7 @@ export default function LoginForm() {
             </div>
           </div>
         </div>
-      </main>
+      </div>
     </div>
   )
 }

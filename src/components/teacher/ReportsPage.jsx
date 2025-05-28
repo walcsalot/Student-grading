@@ -1,5 +1,3 @@
-"use client"
-
 import { useState, useEffect } from "react"
 import TeacherLayout from "../layout/teacher-layout"
 import { FileDown } from "lucide-react"
@@ -12,11 +10,9 @@ export default function ReportsPage() {
   const [gradeRecords, setGradeRecords] = useState([])
   const [selectedSubject, setSelectedSubject] = useState("")
   const [activeTab, setActiveTab] = useState("attendance")
-  // Removed unused loading state
 
   useEffect(() => {
     const fetchData = async () => {
-      // Removed setLoading call
       const { data: subjectsData } = await supabase.from("subjects").select("*")
       const { data: studentsData } = await supabase.from("students").select("*")
       const { data: attendanceData } = await supabase.from("attendance").select("*")
@@ -26,7 +22,6 @@ export default function ReportsPage() {
       if (studentsData) setStudents(studentsData)
       if (attendanceData) setAttendanceRecords(attendanceData)
       if (gradesData) setGradeRecords(gradesData)
-      // Removed setLoading call
     }
     fetchData()
   }, [])
@@ -147,7 +142,8 @@ export default function ReportsPage() {
       return acc
     }, {})
 
-    const dates = Object.keys(attendanceByDate).sort()
+    // Get only the 3 most recent attendance dates
+    const dates = Object.keys(attendanceByDate).sort().slice(-7)
     const enrolledStudents = students.filter((student) => student.subjects?.includes(selectedSubject))
 
     const htmlContent = `
@@ -170,7 +166,7 @@ export default function ReportsPage() {
         </head>
         <body>
           <div class="header">
-            <h1>Attendance Report</h1>
+            <h1>Recent Attendance Report</h1>
             <h2>${subject.code} - ${subject.name}</h2>
           </div>
           
@@ -179,6 +175,7 @@ export default function ReportsPage() {
             <strong>Semester:</strong> ${subject.semester}<br>
             <strong>School Year:</strong> ${subject.school_year}<br>
             <strong>Total Students:</strong> ${enrolledStudents.length}<br>
+            <strong>Showing:</strong> Last 3 attendance records<br>
             <strong>Report Generated:</strong> ${new Date().toLocaleDateString()}
           </div>
   
@@ -397,8 +394,8 @@ export default function ReportsPage() {
                 </div>
                 <div className="p-4">
                   <p className="mb-4 text-gray-500">
-                    Export attendance records for the selected subject. The report includes attendance status (Present,
-                    Absent, Late, Excused) for each student.
+                    Export attendance records for the selected subject. The PDF report shows the 3 most recent
+                    attendance records, while CSV includes all records.
                   </p>
                   <div className="flex flex-col sm:flex-row gap-2">
                     <button
@@ -413,7 +410,7 @@ export default function ReportsPage() {
                       onClick={exportAttendancePDF}
                     >
                       <FileDown className="h-4 w-4" />
-                      Export as PDF
+                      Export as PDF (Recent)
                     </button>
                   </div>
                 </div>

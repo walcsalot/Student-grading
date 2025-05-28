@@ -1,5 +1,3 @@
-"use client"
-
 import { useState, useEffect } from "react"
 import TeacherLayout from "../layout/teacher-layout"
 import { Plus, Pencil, Trash } from "lucide-react"

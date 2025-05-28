@@ -1,5 +1,3 @@
-"use client"
-
 import { useState, useEffect } from "react"
 import TeacherLayout from "../layout/teacher-layout"
 import { Plus, Pencil, Trash, Upload } from "lucide-react"
@@ -354,7 +352,7 @@ export default function StudentsPage() {
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      placeholder="e.g., john.doe@example.com"
+                      placeholder="e.g., ...@example.com"
                       required
                     />
                   </div>

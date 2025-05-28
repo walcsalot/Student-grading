@@ -1,5 +1,3 @@
-"use client"
-
 import { useState, useEffect } from "react"
 import TeacherLayout from "../layout/teacher-layout"
 import { Save } from "lucide-react"

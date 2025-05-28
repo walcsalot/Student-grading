@@ -1,5 +1,3 @@
-"use client"
-
 import { useState, useEffect } from "react"
 import { FiHome, FiBook, FiUsers, FiCalendar, FiAward, FiFileText, FiLogOut, FiMenu, FiX } from "react-icons/fi"
 import { supabase } from "../../lib/supabaseClient"
@@ -57,8 +55,6 @@ export default function TeacherLayout({ children, title }) {
             role: session.user.user_metadata?.role,
             username: session.user.user_metadata?.username || session.user.email.split("@")[0],
           })
-        } else {
-          navigate("/")
         }
       }
     })
